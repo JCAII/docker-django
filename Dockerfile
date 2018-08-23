@@ -1,4 +1,4 @@
-FROM python:3.5.4-jessie
+FROM python:3.6.6-stretch
 ENV PYTHONBUFFERED 1
 ENV TERM screen-256color
 ENV PYTHONPATH=/app/src
