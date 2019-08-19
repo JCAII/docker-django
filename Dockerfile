@@ -1,4 +1,4 @@
-FROM python:3.6.6-stretch
+FROM python:3.7.4-buster
 ENV PYTHONBUFFERED 1
 ENV TERM screen-256color
 ENV PYTHONPATH=/app/src
@@ -11,7 +11,7 @@ ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["gunicorn", "--access-logfile", "-", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
 RUN mkdir -p /app/var/log
 RUN \
-  echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' \
+  echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' \
     > /etc/apt/sources.list.d/postgresql.list \
   && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc \
     | apt-key add - \

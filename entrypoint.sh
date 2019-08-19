@@ -10,7 +10,7 @@ set -e
 # Define help message
 show_help() {
     echo """
-Usage: docker run <imagename> COMMAND
+Usage: docker run <imagename> [COMMAND]
 
 Commands
 
@@ -52,11 +52,27 @@ wait_for() {
     echo "Done waiting" >&2
 }
 
+collectstatic() {
+    if [ ${COLLECTSTATIC:-0} -eq 1 ]; then
+        echo "Collecting static files..." >&2
+        python ./src/manage.py collectstatic --no-input --no-color
+        echo "Collected everything" >&2
+    fi
+}
+
 initdb() {
     if [ ${INITDB:-0} -eq 1 ]; then
         echo "Initializing database..." >&2
-        python ./src/manage.py migrate --run-syncdb
+        python ./src/manage.py migrate --run-syncdb --no-input --no-color
         echo "Initializing database complete" >&2
+    fi
+}
+
+apply_fixtures() {
+    if [ ${APPLY_FIXTURES:-0} -eq 1 -a ! -z "$FIXTURES" ]; then
+        echo "Applying fixtures..." >&2
+        python ./src/manage.py loaddata $FIXTURES --no-input --no-color
+        echo "Fixtures applied" >&2
     fi
 }
 
@@ -69,7 +85,9 @@ setup_commands() {
 }
 
 wait_for
+collectstatic
 initdb
+apply_fixtures
 setup_commands
 
 # Run
@@ -97,7 +115,7 @@ case "$1" in
         exec celery --app="$APP" worker -c 1 --maxtasksperchild=512 -l info --workdir="$BASE_DIR" "${@:2}"
     ;;
     cron)
-        exec celery --app="$APP" beat -s var/celerybeat-schedule -l info --workdir="$BASE_DIR" "${@:2}"
+        exec celery --app="$APP" beat -s /app/var/celerybeat-schedule -l info --workdir="$BASE_DIR" "${@:2}"
     ;;
     help)
         show_help
