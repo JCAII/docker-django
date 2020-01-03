@@ -8,7 +8,7 @@ ENV PIPENV_VENV_IN_PROJECT=1
 EXPOSE 8000
 WORKDIR /app
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["gunicorn", "--access-logfile", "-", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+CMD ["gunicorn", "--access-logfile", "-", "--bind", "0.0.0.0:8000", "--workers", "32", "--threads", "4", "config.wsgi:application"]
 RUN mkdir -p /app/var/log
 RUN \
   echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' \
