@@ -16,7 +16,7 @@ RUN \
   && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc \
     | apt-key add - \
   && apt-get update && apt-get install -y --no-install-recommends \
-    postgresql-client-9.5 \
+    postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir pipenv
 ADD entrypoint.sh /app/entrypoint.sh
