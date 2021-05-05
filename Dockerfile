@@ -4,7 +4,6 @@ ENV TERM screen-256color
 ENV PYTHONPATH=/app/src
 ENV DJANGO_SETTINGS_MODULE=config.settings
 ENV BASE_DIR=/app/src
-ENV PIPENV_VENV_IN_PROJECT=1
 EXPOSE 8000
 WORKDIR /app
 ENTRYPOINT ["/app/entrypoint.sh"]
@@ -18,5 +17,5 @@ RUN \
   && apt-get update && apt-get install -y --no-install-recommends \
     postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
-RUN pip install --no-cache-dir pipenv
+RUN pip install -U --no-cache-dir pip
 ADD entrypoint.sh /app/entrypoint.sh
