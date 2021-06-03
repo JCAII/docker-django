@@ -1,4 +1,4 @@
-FROM python:3.9.1-buster
+FROM python:3.9.5-buster
 ENV PYTHONBUFFERED 1
 ENV TERM screen-256color
 ENV PYTHONPATH=/app/src
