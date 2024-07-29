@@ -1,4 +1,4 @@
-FROM python:3.9.1-buster
+FROM python:3.11.9-bullseye
 ENV PYTHONBUFFERED 1
 ENV TERM screen-256color
 ENV PYTHONPATH=/app/src
@@ -10,7 +10,7 @@ ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["gunicorn", "--access-logfile", "-", "--forwarded-allow-ips", "*", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
 RUN mkdir -p /app/var/log
 RUN \
-  echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' \
+  echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' \
     > /etc/apt/sources.list.d/postgresql.list \
   && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc \
     | apt-key add - \
