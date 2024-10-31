@@ -10,6 +10,6 @@ ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["gunicorn", "--access-logfile", "-", "--forwarded-allow-ips", "*", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
 RUN mkdir -p /app/var/log
 RUN apk upgrade \
-  && apk add --no-cache --virtual postgresql-dev gcc musl-dev bash
+  && apk add --no-cache --virtual postgresql-dev gcc musl-dev python3-dev py-pip bash
 RUN pip install -U --no-cache-dir pipenv==2024.3.1
 ADD entrypoint.sh /app/entrypoint.sh
