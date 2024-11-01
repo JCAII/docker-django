@@ -12,4 +12,4 @@ RUN mkdir -p /app/var/log
 RUN apk upgrade \
   && apk add --no-cache postgresql-dev gcc musl-dev bash
 RUN pip install -U --no-cache-dir pipenv==2024.3.1
-ADD entrypoint.sh /app/entrypoint.sh
+COPY entrypoint.sh /app/entrypoint.sh
