@@ -7,7 +7,7 @@ ENV BASE_DIR=/app/src
 EXPOSE 8000
 WORKDIR /app
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["gunicorn", "--access-logfile", "-", "--forwarded-allow-ips", "*", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+CMD ["granian", "--access-log", "--host", "0.0.0.0", "--port", "8000", "--interface", "wsgi", "config.wsgi:application"]
 RUN mkdir -p /app/var/log
 RUN apk upgrade \
   && apk add --no-cache postgresql-dev gcc musl-dev bash
