@@ -12,6 +12,7 @@ RUN mkdir -p /app/var/log
 RUN apk upgrade \
   && apk add --no-cache postgresql-dev gcc musl-dev curl bash
 # Project dep management
+# Ditch pipenv when uv swap is complete
 RUN pip install -U --no-cache-dir pipenv==2024.3.1
 ARG UV_VERSION=0.7.19
 RUN curl -LO "https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-x86_64-unknown-linux-musl.tar.gz"
