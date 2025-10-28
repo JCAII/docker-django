@@ -90,6 +90,21 @@ initdb
 apply_fixtures
 setup_commands
 
+
+# >>> Added for Datadog
+if [ "${DATADOG_ENABLED:-0}" = "1" ]; then
+  # Only prepend ddtrace-run if it's not already part of the command
+  if [ "$1" != "ddtrace-run" ]; then
+    case "$1" in
+      manage|runserver|python|db|shell|worker|cron|granian|gunicorn|celery|*/celery)
+        echo "Datadog tracing enabled — wrapping command with ddtrace-run" >&2
+        set -- ddtrace-run "$@"
+        ;;
+    esac
+  fi
+fi
+# <<< End Datadog block
+
 # Run
 case "$1" in
     bash)
@@ -124,15 +139,3 @@ case "$1" in
         exec "${@}"  # running default CMD
     ;;
 esac
-
-if [ "${DATADOG_ENABLED:-0}" = "1" ]; then
-  # Only prepend ddtrace-run if it's not already part of the command
-  if [ "$1" != "ddtrace-run" ]; then
-    case "$1" in
-      manage|runserver|python|db|shell|worker|cron|granian|gunicorn|celery|*/celery)
-        echo "Datadog tracing enabled — wrapping command with ddtrace-run" >&2
-        set -- ddtrace-run "$@"
-        ;;
-    esac
-  fi
-fi
