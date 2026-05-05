@@ -26,7 +26,7 @@ help    : Show this message
 wait_for() {
     # Wait for hosts specified in WAIT_FOR
     echo "Waiting for neighbors..." >&2
-    TIMEOUT=${TIMEOUT:-90}
+    TIMEOUT=${TIMEOUT:-45}
     result=0    # exit right away if list is empty
     for i in $(seq "$TIMEOUT"); do
         for TARGET in $WAIT_FOR; do
