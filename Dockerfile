@@ -7,9 +7,16 @@ ENV BASE_DIR=/app/src
 EXPOSE 8000
 WORKDIR /app
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["gunicorn", "--access-logfile", "-", "--forwarded-allow-ips", "*", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+CMD ["granian", "--access-log", "--host", "0.0.0.0", "--port", "8000", "--interface", "wsgi", "config.wsgi:application"]
 RUN mkdir -p /app/var/log
 RUN apk upgrade \
-  && apk add --no-cache postgresql-dev gcc musl-dev bash
+  && apk add --no-cache postgresql-dev gcc musl-dev curl bash
+# Project dep management
+# Ditch pipenv when uv swap is complete
 RUN pip install -U --no-cache-dir pipenv==2024.3.1
+ARG UV_VERSION=0.7.19
+RUN curl -LO "https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-x86_64-unknown-linux-musl.tar.gz"
+RUN tar -xzf uv-x86_64-unknown-linux-musl.tar.gz
+RUN mv uv-x86_64-unknown-linux-musl/uv /usr/local/bin/
+RUN chmod +x /usr/local/bin/uv
 COPY entrypoint.sh /app/entrypoint.sh
